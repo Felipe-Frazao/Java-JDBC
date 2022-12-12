@@ -1,4 +1,5 @@
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -10,8 +11,8 @@ public class TestaListagem {
 		
 		Connection con = ConnectionFactory.criaConexao();
 		
-		Statement stm = con.createStatement();
-		stm.execute("SELECT id, nome,descricao FROM produto");
+		PreparedStatement stm = con.prepareStatement("SELECT id, nome,descricao FROM produto");
+		stm.execute();
 		ResultSet rs = stm.getResultSet();
 		while(rs.next()) {
 			Integer id = rs.getInt("ID");
@@ -22,19 +23,23 @@ public class TestaListagem {
 		con.close();
 	}
 	
-	public void insert() throws SQLException{
+	public void insert(String produto, String descricao) throws SQLException{
 		
  		Connection con = ConnectionFactory.criaConexao();
-		Statement stm = con.createStatement();
-		stm.execute("INSERT INTO produto (nome, descricao) values ('Fogao', 'fogao brastemp')", Statement.RETURN_GENERATED_KEYS);
+ 		con.setAutoCommit(false);
+ 		PreparedStatement stm = con.prepareStatement("INSERT INTO PRODUTO (nome, descricao) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+		stm.setString(1, produto);
+		stm.setString(2, descricao);
+		stm.execute();
 		ResultSet rs = stm.getGeneratedKeys();
 		
 	}
 	
 	public void remove() throws SQLException {
 		Connection con = ConnectionFactory.criaConexao();
-		Statement stm = con.createStatement();
-		stm.execute("Delete from produto where id > 2");
+		PreparedStatement stm = con.prepareStatement("Delete from produto where id > ?");
+		stm.setInt(1, 2);
+		stm.execute();
 		int qm = stm.getUpdateCount();
 		System.out.println("quantidade de linhas excluidas = " + qm);
 		
@@ -44,10 +49,11 @@ public class TestaListagem {
 		
 
 		TestaListagem tl = new TestaListagem();
-		tl.insert();
+//		tl.insert("fogao", "fogao brastemp");
+//		tl.insert("fogao", "Microondas consul");
 		tl.query();
-		tl.remove();
-		tl.query();
+//		tl.remove();
+//		tl.query();
 	}
 
 }
