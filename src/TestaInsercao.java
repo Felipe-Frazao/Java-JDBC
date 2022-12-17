@@ -10,8 +10,8 @@ public class TestaInsercao {
 	public static void main(String[] args) throws SQLException {
 
 		
-		Connection connection = ConnectionFactory.criaConexao();
-		Connection con = ConnectionFactory.criaConexao();
+		ConnectionFactory cf = new ConnectionFactory();
+		Connection con = cf.criaConexao();
  		con.setAutoCommit(false);
  		PreparedStatement stm = con.prepareStatement("INSERT INTO PRODUTO (nome, descricao) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
  		
@@ -20,7 +20,7 @@ public class TestaInsercao {
 		
 		con.commit();
 		stm.close();
-		connection.close();
+		con.close();
 	}
 
 	public static void adicionarVariaveis( String nome, String descricao, PreparedStatement stm) throws SQLException {

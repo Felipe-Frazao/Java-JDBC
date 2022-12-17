@@ -6,10 +6,12 @@ import java.sql.Statement;
 
 public class TestaListagem {
 	
+	ConnectionFactory cf = new ConnectionFactory();
+	Connection con;
 	
 	public void query() throws SQLException {
 		
-		Connection con = ConnectionFactory.criaConexao();
+		con = cf.criaConexao();
 		
 		PreparedStatement stm = con.prepareStatement("SELECT id, nome,descricao FROM produto");
 		stm.execute();
@@ -25,7 +27,7 @@ public class TestaListagem {
 	
 	public void insert(String produto, String descricao) throws SQLException{
 		
- 		Connection con = ConnectionFactory.criaConexao();
+		con = cf.criaConexao();
  		con.setAutoCommit(false);
  		PreparedStatement stm = con.prepareStatement("INSERT INTO PRODUTO (nome, descricao) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
 		stm.setString(1, produto);
@@ -36,7 +38,7 @@ public class TestaListagem {
 	}
 	
 	public void remove() throws SQLException {
-		Connection con = ConnectionFactory.criaConexao();
+		con = cf.criaConexao();
 		PreparedStatement stm = con.prepareStatement("Delete from produto where id > ?");
 		stm.setInt(1, 2);
 		stm.execute();
