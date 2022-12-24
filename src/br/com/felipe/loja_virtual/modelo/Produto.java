@@ -6,13 +6,20 @@ public class Produto {
 	private String nome;
 	private String descricao;
 	
-	public Produto() {}
+	public Produto(int id, String nome, String descricao) {
+		this.id = id;
+		this.nome = nome;
+		this.descricao = descricao;
+	}
 	
 	public Produto(String nome, String descricao){
 		this.nome = nome;
 		this.descricao = descricao;
 	}
 	
+	public Produto(){
+		
+	}
 	
 	public String getNome() {
 		return nome;
